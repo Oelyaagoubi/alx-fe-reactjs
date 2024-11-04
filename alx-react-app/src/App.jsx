@@ -5,7 +5,7 @@ import './App.css'
 import Header from './Header'
 import Footer from './Footer'
 import MainContent from './MainContent'
-import WelcomeMessage from './WelcomeMessage'
+import WelcomeMessage from './Welcome'
 
 function App() {
   const [count, setCount] = useState(0)
