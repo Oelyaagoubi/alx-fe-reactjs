@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 
 function Navbar() {
   return (
-    <nav>
+    <nav style={{
+        backgroundColor:'lightblue',
+        
+    }}>
       <ul style={{
         listStyle :'none', 
         display:'flex', 
