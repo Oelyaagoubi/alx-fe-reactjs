@@ -7,6 +7,7 @@ import AddRecipeForm from './components/AddRecipeForm'
 import RecipeDetails from './components/RecipeDetails'
 import DeleteRecipeButton from './components/DeleteRecipeButton'
 import EditRecipeForm from './components/EditRecipeForm';
+import SearchBar from './components/SearchBar';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
            
           </ul>
         </nav>
+        <SearchBar />  {/* Include SearchBar to allow searching */}
         <Routes>
           
           <Route path="/" element={<RecipeList/>} />

@@ -1,22 +1,35 @@
 import { useRecipeStore } from './recipeStore';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const RecipeList = () => {
-  const recipes = useRecipeStore((state) => state.recipes);
+  // Get filtered recipes from Zustand store
+  const filteredRecipes = useRecipeStore((state) => state.filteredRecipes);
+  const filterRecipes = useRecipeStore((state) => state.filterRecipes);
+  const recipes = useRecipeStore((state) => state.recipes); // All recipes
+
+  // Ensure that filtering is applied when recipes change
+  useEffect(() => {
+    filterRecipes(); // Reapply filter whenever recipes or search term changes
+  }, [recipes]);
 
   return (
     <div>
       <h2>Recipes</h2>
       <Link to="/add">Add Recipe</Link>
       <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}>
-            <h3>{recipe.title}</h3>
-            <Link to={`/recipe/${recipe.id}`}>View Details</Link> |{' '}
-            <Link to={`/edit/${recipe.id}`}>Edit</Link> |{' '}
-            <Link to={`/delete/${recipe.id}`}>Delete</Link>
-          </li>
-        ))}
+        {filteredRecipes.length === 0 ? (
+          <li>No recipes found.</li>
+        ) : (
+          filteredRecipes.map((recipe) => (
+            <li key={recipe.id}>
+              <h3>{recipe.title}</h3>
+              <Link to={`/recipe/${recipe.id}`}>View Details</Link> |{' '}
+              <Link to={`/edit/${recipe.id}`}>Edit</Link> |{' '}
+              <Link to={`/delete/${recipe.id}`}>Delete</Link>
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
