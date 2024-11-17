@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useRecipeStore } from './recipeStore';
 
 const EditRecipeForm = () => {
-  const { id } = useParams(); // Get recipeId from URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const recipes = useRecipeStore((state) => state.recipes);
-  const updateRecipe = useRecipeStore((state) => state.addRecipe); // Assuming addRecipe overwrites if ID matches
+  const updateRecipe = useRecipeStore((state) => state.updateRecipe);
 
   const recipe = recipes.find((recipe) => recipe.id === parseInt(id));
 
@@ -14,18 +14,14 @@ const EditRecipeForm = () => {
   const [description, setDescription] = useState(recipe ? recipe.description : '');
 
   if (!recipe) {
-    return (
-      <div>
-        <h2>Recipe Not Found</h2>
-        <Link to="/">Back to Recipe List</Link>
-      </div>
-    );
+    return <h2>Recipe Not Found</h2>;
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    updateRecipe({ ...recipe, title, description });
-    navigate(`/recipe/${id}`); // Redirect back to details page
+    const updatedRecipe = { ...recipe, title, description };
+    updateRecipe(updatedRecipe);
+    navigate(`/recipe/${id}`); // Redirect back to the recipe details page
   };
 
   return (
@@ -45,7 +41,6 @@ const EditRecipeForm = () => {
         />
         <button type="submit">Save Changes</button>
       </form>
-      <Link to={`/recipe/${id}`}>Cancel</Link>
     </div>
   );
 };
