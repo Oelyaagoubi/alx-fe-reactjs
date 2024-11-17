@@ -1,17 +1,23 @@
 import { useRecipeStore } from './recipeStore';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
 
 const RecipeList = () => {
-  // Get filtered recipes from Zustand store
   const filteredRecipes = useRecipeStore((state) => state.filteredRecipes);
-  const filterRecipes = useRecipeStore((state) => state.filterRecipes);
-  const recipes = useRecipeStore((state) => state.recipes); // All recipes
+  const addFavorite = useRecipeStore((state) => state.addFavorite);
+  const removeFavorite = useRecipeStore((state) => state.removeFavorite);
+  const favorites = useRecipeStore((state) => state.favorites);
 
-  // Ensure that filtering is applied when recipes change
-  useEffect(() => {
-    filterRecipes(); // Reapply filter whenever recipes or search term changes
-  }, [recipes]);
+  // Function to check if a recipe is in the favorites
+  const isFavorite = (recipeId) => favorites.includes(recipeId);
+
+  // Function to toggle favorites
+  const toggleFavorite = (recipeId) => {
+    if (isFavorite(recipeId)) {
+      removeFavorite(recipeId);
+    } else {
+      addFavorite(recipeId);
+    }
+  };
 
   return (
     <div>
@@ -24,9 +30,14 @@ const RecipeList = () => {
           filteredRecipes.map((recipe) => (
             <li key={recipe.id}>
               <h3>{recipe.title}</h3>
+              <p>{recipe.description}</p>
               <Link to={`/recipe/${recipe.id}`}>View Details</Link> |{' '}
               <Link to={`/edit/${recipe.id}`}>Edit</Link> |{' '}
               <Link to={`/delete/${recipe.id}`}>Delete</Link>
+              |{' '}
+              <button onClick={() => toggleFavorite(recipe.id)}>
+                {isFavorite(recipe.id) ? 'Remove from Favorites' : 'Add to Favorites'}
+              </button>
             </li>
           ))
         )}
