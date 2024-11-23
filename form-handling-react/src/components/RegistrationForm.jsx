@@ -1,80 +1,64 @@
 import React, { useState } from 'react';
-import { formikForm } from './formikForm';
 
-const RegistrationForm = () => {
+function RegistrationForm() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
 
-  const handleSubmit = (values) => {
-    console.log('Form submitted:', values);
-    setUsername(values.username);
-    setEmail(values.email);
-    setPassword(values.password);
+  const validateForm = () => {
+    const newErrors = {};
+    if (!username) newErrors.username = "Username is required.";
+    if (!email) newErrors.email = "Email is required.";
+    if (!password) newErrors.password = "Password is required.";
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
-  // Use the formikForm function
-  const formik = formikForm(handleSubmit, { username, email, password });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+
+    console.log("Form Data Submitted:", { username, email, password });
+  };
 
   return (
-    <div>
-      <h2>Registration Form</h2>
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={formik.values.username}
-            onChange={formik.handleChange}
-            placeholder="Enter your username"
-          />
-          {formik.touched.username && formik.errors.username && (
-            <div>{formik.errors.username}</div>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            placeholder="Enter your email"
-          />
-          {formik.touched.email && formik.errors.email && (
-            <div>{formik.errors.email}</div>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            placeholder="Enter your password"
-          />
-          {formik.touched.password && formik.errors.password && (
-            <div>{formik.errors.password}</div>
-          )}
-        </div>
-
-        <button type="submit" disabled={formik.isSubmitting}>
-          {formik.isSubmitting ? 'Submitting...' : 'Register'}
-        </button>
-      </form>
-
+    <form onSubmit={handleSubmit}>
       <div>
-        <h3>Form Values:</h3>
-        <p>Username: {username}</p>
-        <p>Email: {email}</p>
-        <p>Password: {password}</p>
+        <label>Username:</label>
+        <input
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
       </div>
-    </div>
+      <div>
+        <label>Email:</label>
+        <input
+          name="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+      </div>
+      <div>
+        <label>Password:</label>
+        <input
+          name="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+      </div>
+      <button type="submit">Register</button>
+    </form>
   );
-};
+}
 
 export default RegistrationForm;
