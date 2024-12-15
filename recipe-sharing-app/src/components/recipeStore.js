@@ -3,11 +3,11 @@ import {create} from 'zustand';
 export const useRecipeStore = create((set) => ({
   recipes: [],         // Store for all recipes
   searchTerm: '',      // Store for the search term
-const useRecipeStore = create(set => ({
-  recipes: [],
-  addRecipe: (newRecipe) => set(state => ({ recipes: [...state.recipes, newRecipe] })),
-  setRecipes: (recipes) => set({ recipes })
-}));
+// const useRecipeStore = create(set => ({
+//   recipes: [],
+//   addRecipe: (newRecipe) => set(state => ({ recipes: [...state.recipes, newRecipe] })),
+//   setRecipes: (recipes) => set({ recipes })
+// }));
   // Set the search term
   setSearchTerm: (term) => set({ searchTerm: term }),
 
